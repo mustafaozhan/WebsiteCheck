@@ -7,6 +7,10 @@ import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 import mustafaozhan.github.com.websitecheck.R
+import mustafaozhan.github.com.websitecheck.fragments.SettingsFragment
+import android.webkit.WebViewFragment
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        fab.setOnClickListener {addNewWebsite()}
+        fab.setOnClickListener { addNewWebsite() }
     }
 
     private fun addNewWebsite() {
@@ -33,7 +37,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
             when (item.itemId) {
-                R.id.action_settings -> true
+                R.id.action_settings -> changeFragment()
                 else -> super.onOptionsItemSelected(item)
             }
+
+    private fun changeFragment(): Boolean {
+        if (supportFragmentManager.findFragmentById(R.id.fragment) != null) {//checking if any fragment is open
+            supportFragmentManager
+                    .beginTransaction().
+                    remove(supportFragmentManager.findFragmentById(R.id.fragment)).commit()
+        }
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment, SettingsFragment())//opening preference fragment
+                .commit()
+        return true
+    }
 }
