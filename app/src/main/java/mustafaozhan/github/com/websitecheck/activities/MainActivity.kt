@@ -19,7 +19,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        fab.setOnClickListener {}
+        fab.setOnClickListener {addNewWebsite()}
+    }
+
+    private fun addNewWebsite() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
