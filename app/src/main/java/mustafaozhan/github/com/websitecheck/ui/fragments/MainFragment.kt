@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_main.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.model.Item
@@ -24,8 +23,8 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val itemList = ArrayList<Item>()
-        itemList.add(Item("http//:www.google.com", 400,2,"Hour",false))
-        itemList.add(Item("http//:www.facebook.com", 404,1,"Minute"))
+        itemList.add(Item("http//:www.google.com", 400, 2, "Hour", false))
+        itemList.add(Item("http//:www.facebook.com", 404, 1, "Minute"))
         mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false) as RecyclerView.LayoutManager
         val adapter = MyItemAdapter(itemList)
         mRecyclerView.adapter = adapter

@@ -1,5 +1,6 @@
 package mustafaozhan.github.com.websitecheck.ui.activities
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +12,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.ui.fragments.MainFragment
 import mustafaozhan.github.com.websitecheck.ui.fragments.SettingsFragment
+import android.view.LayoutInflater
+import kotlinx.android.synthetic.main.dialog.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,15 +31,32 @@ class MainActivity : AppCompatActivity() {
         fragmentManager.beginTransaction()
                 .add(R.id.frameLayout, MainFragment(), Companion.MAIN).commit()
 
-        setListeners()
-
-    }
-
-    private fun setListeners() {
         fab.setOnClickListener { addItem() }
+
     }
+
 
     private fun addItem() {
+        val factory = LayoutInflater.from(this)
+        val addItemDialogView = factory.inflate(R.layout.dialog, null)
+        val addItemDialog = AlertDialog.Builder(this).create()
+        addItemDialog.setView(addItemDialogView)
+        addItemDialogView.materialSpinner.setItems("Online", "Offline")
+        addItemDialogView.btnSave.setOnClickListener({
+
+
+            addItemDialog.dismiss()
+        })
+        addItemDialogView.btnCancel.setOnClickListener({ addItemDialog.dismiss() })
+
+        addItemDialog.show()
+
+//        val layoutParams = WindowManager.LayoutParams()
+//        val window = addItemDialog.window
+//        layoutParams.copyFrom(window.attributes)
+//        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+//        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+//        window.attributes = layoutParams
 
     }
 
