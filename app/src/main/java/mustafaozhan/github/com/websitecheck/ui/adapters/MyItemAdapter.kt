@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.item_row.view.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.model.Item
 
@@ -27,7 +28,11 @@ class MyItemAdapter(private var itemList: List<Item>?) :
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindItem(item: Item) {
-
+            itemView.txtName.text = item.name
+            itemView.txtStatus.text = item.code.toString()
+            itemView.txtPeriod.text=item.period.toString()
+            itemView.txtPeriodType.text=item.periodType
+            itemView.switchStatus.isChecked = item.isActive
         }
     }
 }
