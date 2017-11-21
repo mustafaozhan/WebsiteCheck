@@ -1,4 +1,4 @@
-package mustafaozhan.github.com.websitecheck.activities
+package mustafaozhan.github.com.websitecheck.ui.activities
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,30 +9,34 @@ import android.widget.Toast
 
 import kotlinx.android.synthetic.main.activity_main.*
 import mustafaozhan.github.com.websitecheck.R
-import mustafaozhan.github.com.websitecheck.fragments.MainFragment
-import mustafaozhan.github.com.websitecheck.fragments.SettingsFragment
+import mustafaozhan.github.com.websitecheck.ui.fragments.MainFragment
+import mustafaozhan.github.com.websitecheck.ui.fragments.SettingsFragment
 
 
 class MainActivity : AppCompatActivity() {
-    private val MAIN = "main_fragment"
-    private val SETTINGS = "settings_fragment"
-    private var doubleBackToExitPressedOnce = false
+    companion object {
+        private val MAIN = "main_fragment"
+        private val SETTINGS = "settings_fragment"
+        private var doubleBackToExitPressedOnce = false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
         fragmentManager.beginTransaction()
-                .add(R.id.frameLayout, MainFragment(), MAIN).commit()
+                .add(R.id.frameLayout, MainFragment(), Companion.MAIN).commit()
+
         setListeners()
 
     }
 
     private fun setListeners() {
-        fab.setOnClickListener { addNewWebsite() }
+        fab.setOnClickListener { addItem() }
     }
 
-    private fun addNewWebsite() {
+    private fun addItem() {
 
     }
 
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.frameLayout, SettingsFragment(), SETTINGS)//opening preference fragment
+                .replace(R.id.frameLayout, SettingsFragment(), Companion.SETTINGS)//opening preference fragment
                 .commit()
         return true
     }
@@ -65,14 +69,14 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
             return
         }
-        val myFragment = fragmentManager.findFragmentByTag(SETTINGS)
+        val myFragment = fragmentManager.findFragmentByTag(Companion.SETTINGS)
         if (myFragment != null && myFragment.isVisible) {
             fragmentManager
                     .beginTransaction()
-                    .replace(R.id.frameLayout, MainFragment(), MAIN)
+                    .replace(R.id.frameLayout, MainFragment(), Companion.MAIN)
                     .commit()
         } else {
-            this.doubleBackToExitPressedOnce = true
+            doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
             Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         }
