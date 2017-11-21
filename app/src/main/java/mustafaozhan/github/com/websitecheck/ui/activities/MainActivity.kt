@@ -13,7 +13,11 @@ import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.ui.fragments.MainFragment
 import mustafaozhan.github.com.websitecheck.ui.fragments.SettingsFragment
 import android.view.LayoutInflater
+import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
+import mustafaozhan.github.com.websitecheck.model.Item
+import ninja.sakib.pultusorm.core.PultusORM
+import java.time.chrono.ChronoPeriod
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,34 +35,40 @@ class MainActivity : AppCompatActivity() {
         fragmentManager.beginTransaction()
                 .add(R.id.frameLayout, MainFragment(), Companion.MAIN).commit()
 
-        fab.setOnClickListener { addItem() }
+        fab.setOnClickListener { showDialog() }
 
     }
 
 
-    private fun addItem() {
+    private fun showDialog() {
         val factory = LayoutInflater.from(this)
         val addItemDialogView = factory.inflate(R.layout.dialog, null)
         val addItemDialog = AlertDialog.Builder(this).create()
         addItemDialog.setView(addItemDialogView)
-        addItemDialogView.materialSpinner.setItems("Online", "Offline")
+        addItemDialogView.mSpinnerStatus.setItems("Online", "Offline")
+        addItemDialogView.mSpinnerType.setItems("Minute(s)", "Hour(s)", "Day(s)")
         addItemDialogView.btnSave.setOnClickListener({
-
-
-            addItemDialog.dismiss()
+            if (addItemDialogView.eTxtUrl.text.toString() != "" && addItemDialogView.eTxtPeriod.text.toString() != "") {
+                addItem(addItemDialogView.eTxtUrl.text.toString(), addItemDialogView.mSpinnerStatus.text.toString(),
+                        addItemDialog.eTxtPeriod.text.toString(), addItemDialogView.mSpinnerType.text.toString())
+                addItemDialog.dismiss()
+            } else
+                Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
         })
         addItemDialogView.btnCancel.setOnClickListener({ addItemDialog.dismiss() })
 
         addItemDialog.show()
 
-//        val layoutParams = WindowManager.LayoutParams()
-//        val window = addItemDialog.window
-//        layoutParams.copyFrom(window.attributes)
-//        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-//        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-//        window.attributes = layoutParams
-
     }
+
+    private fun addItem(text: String, status: String, period: String, type: String) {
+        val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
+        var state = 0
+        if (status == "Online")
+            state = 1
+        myDatabase.save(Item(text, state, period.toInt(), type))
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)

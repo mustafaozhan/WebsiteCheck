@@ -2,8 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/blue_grey_200">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/btnSave"
@@ -34,15 +33,15 @@
         app:layout_constraintTop_toBottomOf="@+id/eTxtPeriod" />
 
     <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/materialSpinner"
-        android:layout_width="100sp"
+        android:id="@+id/mSpinnerStatus"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eTxtUrl"
-        app:ms_background_color="@color/blue_grey_200" />
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/eTxtUrl" />
 
     <TextView
         android:id="@+id/textView"
@@ -63,7 +62,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/status"
-        app:layout_constraintBaseline_toBaselineOf="@+id/materialSpinner"
+        app:layout_constraintBaseline_toBaselineOf="@+id/mSpinnerStatus"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -76,23 +75,25 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/eTxtPeriod"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/mSpinnerType"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/eTxtPeriod"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mSpinnerStatus"
+        android:layout_marginRight="8dp" />
 
     <EditText
         android:id="@+id/eTxtUrl"
-        android:layout_width="100sp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="textUri"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
@@ -100,14 +101,15 @@
 
     <EditText
         android:id="@+id/eTxtPeriod"
-        android:layout_width="100sp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="numberDecimal"
-        app:layout_constraintEnd_toStartOf="@+id/textView5"
+        app:layout_constraintEnd_toStartOf="@+id/mSpinnerType"
         app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/materialSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/mSpinnerStatus" />
 </android.support.constraint.ConstraintLayout>

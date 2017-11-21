@@ -12,21 +12,35 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.model.Item
 import mustafaozhan.github.com.websitecheck.ui.adapters.MyItemAdapter
+import ninja.sakib.pultusorm.core.PultusORM
 
 /**
  * Created by Mustafa Ozhan on 11/19/17 at 3:13 PM on Arch Linux.
  */
 class MainFragment : Fragment() {
+    private val itemList = ArrayList<Item>()
+    private val adapter = MyItemAdapter(itemList)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_main, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val itemList = ArrayList<Item>()
-        itemList.add(Item("http//:www.google.com", 400, 2, "Hour", false))
-        itemList.add(Item("http//:www.facebook.com", 404, 1, "Minute"))
+
+        setItems()
+
         mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false) as RecyclerView.LayoutManager
-        val adapter = MyItemAdapter(itemList)
         mRecyclerView.adapter = adapter
+    }
+
+    private fun setItems() {
+        itemList.clear()
+        val myDatabase = PultusORM("myDatabase.db", activity.applicationContext.filesDir.absolutePath)
+        val items = myDatabase.find(Item())
+
+        for (it in items) {
+            it as Item
+            itemList.add(it)
+        }
+        adapter.notifyDataSetChanged()
     }
 }
