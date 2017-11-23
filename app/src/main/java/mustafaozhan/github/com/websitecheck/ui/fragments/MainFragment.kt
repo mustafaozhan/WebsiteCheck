@@ -11,13 +11,18 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_main.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.model.Item
+import mustafaozhan.github.com.websitecheck.ui.activities.MainActivity
 import mustafaozhan.github.com.websitecheck.ui.adapters.MyItemAdapter
 import ninja.sakib.pultusorm.core.PultusORM
 
 /**
  * Created by Mustafa Ozhan on 11/19/17 at 3:13 PM on Arch Linux.
  */
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), MainActivity.ActivityCallBack {
+    override fun onMethodCallback() {
+        setItems()
+    }
+
     private val itemList = ArrayList<Item>()
     private val adapter = MyItemAdapter(itemList)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

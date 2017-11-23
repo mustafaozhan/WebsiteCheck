@@ -1,6 +1,7 @@
 package mustafaozhan.github.com.websitecheck.ui.activities
 
 import android.app.AlertDialog
+import android.app.Fragment
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
@@ -17,10 +18,11 @@ import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
-import java.time.chrono.ChronoPeriod
 
 
 class MainActivity : AppCompatActivity() {
+    private var activityCallBack: ActivityCallBack? = null
+
     companion object {
         private val MAIN = "main_fragment"
         private val SETTINGS = "settings_fragment"
@@ -52,12 +54,15 @@ class MainActivity : AppCompatActivity() {
                 addItem(addItemDialogView.eTxtUrl.text.toString(), addItemDialogView.mSpinnerStatus.text.toString(),
                         addItemDialog.eTxtPeriod.text.toString(), addItemDialogView.mSpinnerType.text.toString())
                 addItemDialog.dismiss()
+                activityCallBack!!.onMethodCallback()
+
             } else
                 Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
         })
         addItemDialogView.btnCancel.setOnClickListener({ addItemDialog.dismiss() })
 
         addItemDialog.show()
+
 
     }
 
@@ -110,5 +115,15 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
             Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         }
+    }
+
+    interface ActivityCallBack {
+        fun onMethodCallback()
+    }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        super.onAttachFragment(fragment)
+        if (fragment is MainFragment)
+            activityCallBack = fragment
     }
 }
