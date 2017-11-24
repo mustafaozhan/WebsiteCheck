@@ -46,6 +46,10 @@ class MainFragment : Fragment(), MainActivity.ActivityCallBack {
             it as Item
             itemList.add(it)
         }
+        items.forEach {
+            it as Item
+            itemList.add(it)
+        }
         adapter.notifyDataSetChanged()
     }
 }

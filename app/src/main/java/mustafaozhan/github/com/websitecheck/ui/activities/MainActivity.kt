@@ -18,6 +18,9 @@ import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
+import org.jetbrains.anko.doAsync
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -86,15 +89,30 @@ class MainActivity : AppCompatActivity() {
                 else -> super.onOptionsItemSelected(item)
             }
 
+    private fun checkURL(myURL: String) {
+        doAsync {
+            val url = URL(myURL)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connect()
+            val code = connection.responseCode
+            runOnUiThread {
+                Toast.makeText(applicationContext, code.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+    }
+
     private fun changeFragment(): Boolean {
-        if (supportFragmentManager.findFragmentById(R.id.frameLayout) != null) {//checking if any fragment is open
+        if (supportFragmentManager.findFragmentById(R.id.frameLayout) != null) {
             supportFragmentManager
                     .beginTransaction().
                     remove(supportFragmentManager.findFragmentById(R.id.frameLayout)).commit()
         }
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.frameLayout, SettingsFragment(), Companion.SETTINGS)//opening preference fragment
+                .replace(R.id.frameLayout, SettingsFragment(), Companion.SETTINGS)
                 .commit()
         return true
     }

@@ -31,4 +31,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'ninja.sakib:PultusORM:v1.7'
     compile 'com.jaredrummler:material-spinner:1.2.1'
+    compile 'org.jetbrains.anko:anko-commons:0.10.1'
 }
