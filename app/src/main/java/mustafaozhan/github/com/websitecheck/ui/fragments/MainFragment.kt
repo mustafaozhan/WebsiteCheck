@@ -24,7 +24,7 @@ class MainFragment : Fragment(), MainActivity.ActivityCallBack {
     }
 
     private val itemList = ArrayList<Item>()
-    private val adapter = MyItemAdapter(itemList,activity.applicationContext)
+    private val adapter = MyItemAdapter(itemList)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_main, container, false)
 
