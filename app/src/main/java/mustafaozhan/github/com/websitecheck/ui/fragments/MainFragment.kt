@@ -53,8 +53,12 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onItemDeleted(item: Item) {
-
-
+        itemList.remove(item)
+        myDatabase!!.delete(Item())
+        itemList.forEach {
+            myDatabase!!.save(it)
+        }
+        setItems()
         Toast.makeText(activity.applicationContext, "Item Deleted", Toast.LENGTH_SHORT).show()
     }
 
@@ -113,3 +117,5 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
         setItems()
     }
 }
+
+
