@@ -16,6 +16,7 @@ import mustafaozhan.github.com.websitecheck.ui.fragments.SettingsFragment
 import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
+import mustafaozhan.github.com.websitecheck.interfaces.ActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
 import org.jetbrains.anko.doAsync
@@ -133,10 +134,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
             Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         }
-    }
-
-    interface ActivityCallBack {
-        fun onMethodCallback()
     }
 
     override fun onAttachFragment(fragment: Fragment) {

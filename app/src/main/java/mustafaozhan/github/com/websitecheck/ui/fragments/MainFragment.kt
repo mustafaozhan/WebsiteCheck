@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_main.*
 import mustafaozhan.github.com.websitecheck.R
+import mustafaozhan.github.com.websitecheck.interfaces.ActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import mustafaozhan.github.com.websitecheck.ui.activities.MainActivity
 import mustafaozhan.github.com.websitecheck.ui.adapters.MyItemAdapter
@@ -18,7 +19,7 @@ import ninja.sakib.pultusorm.core.PultusORM
 /**
  * Created by Mustafa Ozhan on 11/19/17 at 3:13 PM on Arch Linux.
  */
-class MainFragment : Fragment(), MainActivity.ActivityCallBack {
+class MainFragment : Fragment(), ActivityCallBack {
     override fun onMethodCallback() {
         setItems()
     }
@@ -41,11 +42,6 @@ class MainFragment : Fragment(), MainActivity.ActivityCallBack {
         itemList.clear()
         val myDatabase = PultusORM("myDatabase.db", activity.applicationContext.filesDir.absolutePath)
         val items = myDatabase.find(Item())
-
-        for (it in items) {
-            it as Item
-            itemList.add(it)
-        }
         items.forEach {
             it as Item
             itemList.add(it)
