@@ -8,24 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_main.*
 import mustafaozhan.github.com.websitecheck.R
-import mustafaozhan.github.com.websitecheck.interfaces.ActivityCallBack
+import mustafaozhan.github.com.websitecheck.interfaces.ItemAdapterCallBack
+import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
-import mustafaozhan.github.com.websitecheck.ui.activities.MainActivity
-import mustafaozhan.github.com.websitecheck.ui.adapters.MyItemAdapter
+import mustafaozhan.github.com.websitecheck.ui.adapters.ItemAdapter
 import ninja.sakib.pultusorm.core.PultusORM
 
 /**
  * Created by Mustafa Ozhan on 11/19/17 at 3:13 PM on Arch Linux.
  */
-class MainFragment : Fragment(), ActivityCallBack {
-    override fun onMethodCallback() {
-        setItems()
-    }
+class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
 
     private val itemList = ArrayList<Item>()
-    private val adapter = MyItemAdapter(itemList)
+    private var adapter = ItemAdapter(itemList, this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_main, container, false)
 
@@ -34,7 +32,7 @@ class MainFragment : Fragment(), ActivityCallBack {
 
         setItems()
 
-        mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false) as RecyclerView.LayoutManager
+        mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false)
         mRecyclerView.adapter = adapter
     }
 
@@ -46,6 +44,14 @@ class MainFragment : Fragment(), ActivityCallBack {
             it as Item
             itemList.add(it)
         }
-        adapter.notifyDataSetChanged()
+        adapter!!.notifyDataSetChanged()
+    }
+
+    override fun onItemDeleted() {
+        Toast.makeText(activity.applicationContext, "Long click interface test", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemAdded() {
+        setItems()
     }
 }

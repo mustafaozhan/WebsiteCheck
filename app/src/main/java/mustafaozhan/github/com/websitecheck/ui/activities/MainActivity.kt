@@ -16,7 +16,7 @@ import mustafaozhan.github.com.websitecheck.ui.fragments.SettingsFragment
 import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
-import mustafaozhan.github.com.websitecheck.interfaces.ActivityCallBack
+import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
 import org.jetbrains.anko.doAsync
@@ -25,7 +25,7 @@ import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
-    private var activityCallBack: ActivityCallBack? = null
+    private var mainActivityCallBack: MainActivityCallBack? = null
 
     companion object {
         private val MAIN = "main_fragment"
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 addItem(addItemDialogView.eTxtUrl.text.toString(), addItemDialogView.mSpinnerStatus.text.toString(),
                         addItemDialog.eTxtPeriod.text.toString(), addItemDialogView.mSpinnerType.text.toString())
                 addItemDialog.dismiss()
-                activityCallBack!!.onMethodCallback()
+                mainActivityCallBack!!.onItemAdded()
 
             } else
                 Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
@@ -139,6 +139,6 @@ class MainActivity : AppCompatActivity() {
     override fun onAttachFragment(fragment: Fragment) {
         super.onAttachFragment(fragment)
         if (fragment is MainFragment)
-            activityCallBack = fragment
+            mainActivityCallBack = fragment
     }
 }
