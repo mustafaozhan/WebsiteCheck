@@ -72,10 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addItem(text: String, status: String, period: String, type: String) {
         val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
-        var state = 0
-        if (status == "Online")
-            state = 1
-        myDatabase.save(Item(text, state, period.toInt(), type))
+        myDatabase.save(Item(text, status, period.toInt(), type))
     }
 
 

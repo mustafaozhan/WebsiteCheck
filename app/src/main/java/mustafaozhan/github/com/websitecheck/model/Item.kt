@@ -6,7 +6,7 @@ import ninja.sakib.pultusorm.annotations.PrimaryKey
  * Created by Mustafa Ozhan on 11/21/17 at 1:30 PM on Arch Linux.
  */
 class Item(@PrimaryKey val name: String?=null,
-           val code: Int=0,
+           val code: String="Online",
            val period: Int=0,
            val periodType: String?=null,
            val isActive: Boolean = true)
