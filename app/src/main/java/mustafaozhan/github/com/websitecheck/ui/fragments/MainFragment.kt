@@ -22,6 +22,7 @@ import ninja.sakib.pultusorm.core.PultusORM
  */
 class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
 
+
     private val itemList = ArrayList<Item>()
     private var adapter = ItemAdapter(itemList, this)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -44,11 +45,15 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
             it as Item
             itemList.add(it)
         }
-        adapter!!.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
-    override fun onItemDeleted() {
-        Toast.makeText(activity.applicationContext, "Long click interface test", Toast.LENGTH_SHORT).show()
+    override fun onItemDeleted(item: Item) {
+        Toast.makeText(activity.applicationContext, "Item Deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemUpdated(item: Item) {
+        Toast.makeText(activity.applicationContext, "Item Updated", Toast.LENGTH_SHORT).show()
     }
 
     override fun onItemAdded() {

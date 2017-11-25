@@ -1,5 +1,6 @@
 package mustafaozhan.github.com.websitecheck.ui.adapters
 
+import android.app.AlertDialog
 import android.app.Fragment
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import kotlinx.android.synthetic.main.item_row.view.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.interfaces.ItemAdapterCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
+
 
 /**
  * Created by Mustafa Ozhan on 11/21/17 at 2:40 PM on Arch Linux.
@@ -39,7 +41,25 @@ class ItemAdapter(private var itemList: List<Item>?, fragment: Fragment) : Recyc
 
             itemView.mConstraintLayoutItem.setOnLongClickListener {
 
-                itemAdapterCallback.onItemDeleted()
+                val alertDialogBuilder = AlertDialog.Builder(itemView.context)
+                alertDialogBuilder.setTitle("Delete Item")
+                alertDialogBuilder
+                        .setMessage("Do you want to delete this item ?")
+                        .setCancelable(false)
+                        .setPositiveButton("Delete", { dialog, _ ->
+                            itemAdapterCallback.onItemDeleted(item)
+                            dialog.cancel()
+                        })
+                        .setNegativeButton("Update", { dialog, _ ->
+                            itemAdapterCallback.onItemUpdated(item)
+                            dialog.cancel()
+                        })
+                        .setNeutralButton("Cancel", { dialog, _ ->
+
+                            dialog.cancel()
+                        })
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
                 true
             }
 
