@@ -34,7 +34,7 @@ class ItemAdapter(private var itemList: List<Item>?, fragment: Fragment) : Recyc
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindItem(item: Item, itemAdapterCallback: ItemAdapterCallBack) {
             itemView.txtName.text = item.name
-            itemView.txtStatus.text = item.code.toString()
+            itemView.txtStatus.text = item.state
             itemView.txtPeriod.text = item.period.toString()
             itemView.txtPeriodType.text = item.periodType
             itemView.switchStatus.isChecked = item.isActive

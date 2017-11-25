@@ -4,16 +4,13 @@ import android.app.AlertDialog
 import android.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.item_row.view.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.interfaces.ItemAdapterCallBack
 import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
@@ -22,8 +19,6 @@ import mustafaozhan.github.com.websitecheck.ui.adapters.ItemAdapter
 import ninja.sakib.pultusorm.core.PultusORM
 import ninja.sakib.pultusorm.core.PultusORMCondition
 import ninja.sakib.pultusorm.core.PultusORMUpdater
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.runOnUiThread
 
 /**
  * Created by Mustafa Ozhan on 11/19/17 at 3:13 PM on Arch Linux.
@@ -64,7 +59,7 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onItemUpdated(item: Item) {
-        var tempItem: Item? = null
+
         val factory = LayoutInflater.from(activity)
         val addItemDialogView = factory.inflate(R.layout.dialog, null)
         val addItemDialog = AlertDialog.Builder(activity).create()
@@ -75,15 +70,14 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
         addItemDialogView.mSpinnerType.setItems("Minute(s)", "Hour(s)", "Day(s)")
         addItemDialogView.btnSave.setOnClickListener({
             if (addItemDialogView.eTxtUrl.text.toString() != "" && addItemDialogView.eTxtPeriod.text.toString() != "") {
-                Item()
-                tempItem = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialogView.mSpinnerStatus.text.toString(),
-                        addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialogView.mSpinnerType.toString())
 
+                val tempItem = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialogView.mSpinnerStatus.text.toString(),
+                        addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialogView.mSpinnerType.text.toString())
                 run {
                     val condition: PultusORMCondition = PultusORMCondition.Builder()
                             .eq("name", item.name.toString())
                             .and()
-                            .eq("code", item.code.toString())
+                            .eq("state", item.state)
                             .and()
                             .eq("period", item.period.toString())
                             .and()
@@ -91,11 +85,11 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
                             .build()
 
                     val updater: PultusORMUpdater = PultusORMUpdater.Builder()
-                            .set("name", tempItem!!.name.toString())
-                            .set("code", tempItem!!.code.toString())
-                            .set("period", tempItem!!.period.toString())
-                            .set("periodType", tempItem!!.periodType.toString())
-                            .condition(condition)   // condition is optional
+                            .set("name", tempItem.name.toString())
+                            .set("state", tempItem.state)
+                            .set("period", tempItem.period.toString())
+                            .set("periodType", tempItem.periodType.toString())
+                            .condition(condition)
                             .build()
 
                     myDatabase!!.update(Item(), updater)
