@@ -19,11 +19,6 @@ import mustafaozhan.github.com.websitecheck.ui.adapters.ItemAdapter
 import ninja.sakib.pultusorm.core.PultusORM
 import ninja.sakib.pultusorm.core.PultusORMCondition
 import ninja.sakib.pultusorm.core.PultusORMUpdater
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.content.Context.ALARM_SERVICE
 import mustafaozhan.github.com.websitecheck.utils.AlarmReceiver
 import java.util.*
 
@@ -61,7 +56,6 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onItemDeleted(item: Item) {
-        asd()
         itemList.remove(item)
         myDatabase!!.delete(Item())
         itemList.forEach {
@@ -124,12 +118,12 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
 
     override fun onItemAdded() {
         setItems()
-        asd()
+
     }
 
-    private fun asd() {
-        val asd:AlarmReceiver?=null
-        asd?.SetAlarm(activity.applicationContext)
+    private fun setAlarm() {
+        val asd = AlarmReceiver()
+        asd.setAlarm(activity.applicationContext)
     }
 }
 
