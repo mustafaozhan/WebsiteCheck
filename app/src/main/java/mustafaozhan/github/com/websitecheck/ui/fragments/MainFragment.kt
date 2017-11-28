@@ -19,28 +19,12 @@ import mustafaozhan.github.com.websitecheck.ui.adapters.ItemAdapter
 import ninja.sakib.pultusorm.core.PultusORM
 import ninja.sakib.pultusorm.core.PultusORMCondition
 import ninja.sakib.pultusorm.core.PultusORMUpdater
-import android.app.AlarmManager
-import android.content.Context.ALARM_SERVICE
-import android.app.PendingIntent
-import mustafaozhan.github.com.websitecheck.utils.AlarmReceiver
-import android.content.Intent
-import android.widget.TimePicker
-import android.app.TimePickerDialog
-import android.content.Context
-import android.icu.util.Calendar
-import android.os.Build
-import android.support.annotation.RequiresApi
-import mustafaozhan.github.com.websitecheck.ui.activities.MainActivity
-import org.joda.time.DateTimeFieldType.hourOfDay
-
 
 /**
  * Created by Mustafa Ozhan on 11/19/17 at 3:13 PM on Arch Linux.
  */
 class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
-    companion object {
-        private val REQUEST_CODE = 1
-    }
+
 
     private val itemList = ArrayList<Item>()
     private var myDatabase: PultusORM? = null
@@ -129,39 +113,8 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onItemAdded() {
         setItems()
-        setAlarm(setTime())
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun setTime(): Calendar {
-        val calNow = Calendar.getInstance()
-        val calSet = calNow.clone() as Calendar
-
-        calSet.set(Calendar.HOUR_OF_DAY, 19)
-        calSet.set(Calendar.MINUTE, 12)
-        calSet.set(Calendar.SECOND, 0)
-        calSet.set(Calendar.MILLISECOND, 0)
-
-        if (calSet <= calNow) {
-
-            calSet.add(Calendar.DATE, 1)
-        }
-
-        return calSet
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun setAlarm(alarmCalender: Calendar) {
-        Toast.makeText(activity.applicationContext, "Alarm Ayarlandı!", Toast.LENGTH_SHORT).show()
-        val intent = Intent(activity.baseContext, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(activity.baseContext, REQUEST_CODE, intent, 0)
-        val alarmManager = activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmCalender.timeInMillis, pendingIntent)
-
     }
 }
 
