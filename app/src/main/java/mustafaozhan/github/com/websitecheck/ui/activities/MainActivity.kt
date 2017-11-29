@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         fragmentManager.beginTransaction()
                 .add(R.id.frameLayout, MainFragment(), Companion.MAIN).commit()
 
+
         fab.setOnClickListener { showDialog() }
 
     }
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             } else
                 Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
         })
+
         addItemDialogView.btnCancel.setOnClickListener({ addItemDialog.dismiss() })
 
         addItemDialog.show()

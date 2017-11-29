@@ -42,8 +42,7 @@ class AlarmReceiver : BroadcastReceiver() {
             stringBuilder.append("Nameless")
         else
             stringBuilder.append(extras.getString(TEXT))
-        val intent = Intent(context, NotificationListener::class.java)
-        context.startService(intent)
+
 
         val simpleDateFormat = SimpleDateFormat("hh:mm:ss a")
         stringBuilder.append(simpleDateFormat.format(Date()))
