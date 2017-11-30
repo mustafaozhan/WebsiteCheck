@@ -56,6 +56,8 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onItemDeleted(item: Item) {
+        val asd = AlarmReceiver()
+        asd.cancelAlarm(activity.applicationContext)
         itemList.remove(item)
         myDatabase!!.delete(Item())
         itemList.forEach {
