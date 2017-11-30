@@ -7,8 +7,10 @@ import android.content.Intent
 import android.widget.Toast
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ClipData
 import android.os.PowerManager
 import android.util.Log
+import mustafaozhan.github.com.websitecheck.model.Item
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,9 +55,9 @@ class AlarmReceiver : BroadcastReceiver() {
         wakeLock.release()
     }
 
-    fun setAlarm(context: Context, period: Int = 1, periodType: String = "minute(s)", name: String? = "") {
+    fun setAlarm(context: Context, item: Item) {
         var temp = 1
-        when (periodType) {
+        when (item.periodType) {
             "minute(s)" -> temp = 1
             "hour(s)" -> temp = 60
             "day(s)" -> temp = 60 * 24
@@ -64,23 +66,15 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra(IS_ONE_TIME, false)
-        intent.putExtra(TEXT, name)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (1000 * 60 * period * temp).toLong(), pendingIntent)
+        intent.putExtra(TEXT, item.name)
+        val pendingIntent = PendingIntent.getBroadcast(context, item.requestCode, intent, 0)
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (1000 * 60 * item.period * temp).toLong(), pendingIntent)
     }
 
-    fun cancelAlarm(context: Context) {
+    fun cancelAlarm(context: Context, requestCode: Int) {
         val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
-    }
-
-    fun setOnetimeTimer(context: Context) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra(IS_ONE_TIME, true)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent)
     }
 }
