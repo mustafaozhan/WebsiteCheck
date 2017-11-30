@@ -56,11 +56,9 @@ class MainActivity : AppCompatActivity() {
         addItemDialogView.mSpinnerType.setItems("Minute(s)", "Hour(s)", "Day(s)")
         addItemDialogView.btnSave.setOnClickListener({
             if (addItemDialogView.eTxtUrl.text.toString() != "" && addItemDialogView.eTxtPeriod.text.toString() != "") {
-                addItem(addItemDialogView.eTxtUrl.text.toString(), addItemDialogView.mSpinnerStatus.text.toString(),
-                        addItemDialog.eTxtPeriod.text.toString(), addItemDialogView.mSpinnerType.text.toString())
+                val item = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialog.mSpinnerStatus.text.toString(), addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialog.mSpinnerType.text.toString(), true, Math.random().toInt())
+                addItem(item)
                 addItemDialog.dismiss()
-                mainActivityCallBack!!.onItemAdded()
-
             } else
                 Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
         })
@@ -72,9 +70,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun addItem(text: String, status: String, period: String, type: String) {
+    private fun addItem(item: Item) {
         val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
-        myDatabase.save(Item(text, status, period.toInt(), type, requestCode = Math.random().toInt()))
+        myDatabase.save(item)
+        mainActivityCallBack!!.onItemAdded(item)
     }
 
 
