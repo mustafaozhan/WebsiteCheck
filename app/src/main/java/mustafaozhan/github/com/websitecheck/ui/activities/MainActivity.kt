@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.dialog.view.*
 import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
+import android.preference.PreferenceManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,10 +54,8 @@ class MainActivity : AppCompatActivity() {
         addItemDialogView.mSpinnerType.setItems("Minute(s)", "Hour(s)", "Day(s)")
         addItemDialogView.btnSave.setOnClickListener({
             if (addItemDialogView.eTxtUrl.text.toString() != "" && addItemDialogView.eTxtPeriod.text.toString() != "") {
-                val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
-                val item = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialog.mSpinnerStatus.text.toString(), addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialog.mSpinnerType.text.toString(), true, myDatabase.count(Item()).toInt())
-                myDatabase.save(item)
-                mainActivityCallBack!!.onItemAdded(item)
+                val item = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialog.mSpinnerStatus.text.toString(), addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialog.mSpinnerType.text.toString(), true, getRequestId())
+                addItem(item)
                 addItemDialog.dismiss()
             } else
                 Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
@@ -67,6 +66,21 @@ class MainActivity : AppCompatActivity() {
         addItemDialog.show()
 
 
+    }
+
+    private fun getRequestId(): Int {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        var temp = prefs.getInt("request_code", 0)
+        val editor = prefs.edit()
+        editor.putInt("request_code", temp++) // value to store
+        editor.apply()
+        return temp
+    }
+
+    private fun addItem(item: Item) {
+        val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
+        myDatabase.save(item)
+        mainActivityCallBack!!.onItemAdded(item)
     }
 
 
