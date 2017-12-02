@@ -19,9 +19,6 @@ import kotlinx.android.synthetic.main.dialog.view.*
 import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
-import org.jetbrains.anko.doAsync
-import java.net.HttpURLConnection
-import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,8 +53,10 @@ class MainActivity : AppCompatActivity() {
         addItemDialogView.mSpinnerType.setItems("Minute(s)", "Hour(s)", "Day(s)")
         addItemDialogView.btnSave.setOnClickListener({
             if (addItemDialogView.eTxtUrl.text.toString() != "" && addItemDialogView.eTxtPeriod.text.toString() != "") {
-                val item = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialog.mSpinnerStatus.text.toString(), addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialog.mSpinnerType.text.toString(), true, Math.random().toInt())
-                addItem(item)
+                val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
+                val item = Item(addItemDialogView.eTxtUrl.text.toString(), addItemDialog.mSpinnerStatus.text.toString(), addItemDialogView.eTxtPeriod.text.toString().toInt(), addItemDialog.mSpinnerType.text.toString(), true, myDatabase.count(Item()).toInt())
+                myDatabase.save(item)
+                mainActivityCallBack!!.onItemAdded(item)
                 addItemDialog.dismiss()
             } else
                 Toast.makeText(addItemDialogView.context, "Please fill the places", Toast.LENGTH_SHORT).show()
@@ -68,12 +67,6 @@ class MainActivity : AppCompatActivity() {
         addItemDialog.show()
 
 
-    }
-
-    private fun addItem(item: Item) {
-        val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
-        myDatabase.save(item)
-        mainActivityCallBack!!.onItemAdded(item)
     }
 
 
@@ -87,7 +80,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_settings -> changeFragment()
                 else -> super.onOptionsItemSelected(item)
             }
-
 
 
     private fun changeFragment(): Boolean {
