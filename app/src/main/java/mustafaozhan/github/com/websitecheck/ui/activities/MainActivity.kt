@@ -88,20 +88,7 @@ class MainActivity : AppCompatActivity() {
                 else -> super.onOptionsItemSelected(item)
             }
 
-    private fun checkURL(myURL: String) {
-        doAsync {
-            val url = URL(myURL)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.connect()
-            val code = connection.responseCode
-            runOnUiThread {
-                Toast.makeText(applicationContext, code.toString(), Toast.LENGTH_SHORT).show()
-            }
-        }
 
-
-    }
 
     private fun changeFragment(): Boolean {
         if (supportFragmentManager.findFragmentById(R.id.frameLayout) != null) {

@@ -11,6 +11,9 @@ import android.content.ClipData
 import android.os.PowerManager
 import android.util.Log
 import mustafaozhan.github.com.websitecheck.model.Item
+import org.jetbrains.anko.doAsync
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,7 +30,6 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("ASdasdasdasd", "Asdsadsadas")
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "YOUR TAG")
         //Acquire the lock
@@ -44,7 +46,7 @@ class AlarmReceiver : BroadcastReceiver() {
             stringBuilder.append("Nameless")
         else
             stringBuilder.append(extras.getString(TEXT))
-
+        Log.d("Alarm ", extras.getString(TEXT))
 
         val simpleDateFormat = SimpleDateFormat("hh:mm:ss a")
         stringBuilder.append(simpleDateFormat.format(Date()))
@@ -76,5 +78,20 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, 0)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
+    }
+
+    fun checkURL(myURL: String) {
+        doAsync {
+            val url = URL(myURL)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connect()
+            val code = connection.responseCode
+            run {
+                //                Toast.makeText(, code.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
     }
 }

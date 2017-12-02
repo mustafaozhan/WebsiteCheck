@@ -118,6 +118,8 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
 
     override fun onItemAdded(item: Item) {
         setItems()
+        val alarmReceiver = AlarmReceiver()
+        alarmReceiver.setAlarm(activity.applicationContext, item)
     }
 
 
