@@ -60,9 +60,9 @@ class AlarmReceiver : BroadcastReceiver() {
     fun setAlarm(context: Context, item: Item) {
         var temp = 1
         when (item.periodType) {
-            "minute(s)" -> temp = 1
-            "hour(s)" -> temp = 60
-            "day(s)" -> temp = 60 * 24
+            "Minute(s)" -> temp = 1
+            "Hour(s)" -> temp = 60
+            "Day(s)" -> temp = 60 * 24
         }
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
