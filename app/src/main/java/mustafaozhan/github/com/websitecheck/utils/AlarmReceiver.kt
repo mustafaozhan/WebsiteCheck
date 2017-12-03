@@ -100,9 +100,9 @@ class AlarmReceiver : BroadcastReceiver() {
         // prepare intent which is triggered if the
 // notification is selected
 
-        //val intent = Intent(this, NotificationReceiver::class.java)
-// use System.currentTimeMillis() to have a unique ID for the pending intent
-        //  val pIntent = PendingIntent.getActivity(this, System.currentTimeMillis().toInt(), intent, 0)
+        val intent = Intent(context, MainActivity::class.java)
+//        use System . currentTimeMillis () to have a unique ID for the pending intent
+        val pIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), intent, 0)
 
 // build notification
 // the addAction re-use the same intent to keep the example short
@@ -110,11 +110,8 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setContentTitle("New mail from " + "test@gmail.com")
                 .setContentText("Subject")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                // .setContentIntent(pIntent)
-                .build()
-        //    .addAction(R.drawable.icon, "Call", pIntent)
-        //    .addAction(R.drawable.icon, "More", pIntent)
-        //  .addAction(R.drawable.icon, "And more", pIntent).build()
+                .setContentIntent(pIntent)
+                .addAction(R.drawable.ic_launcher_foreground, "Call", pIntent).build()
 
 
         notificationManager.notify(0, n)
