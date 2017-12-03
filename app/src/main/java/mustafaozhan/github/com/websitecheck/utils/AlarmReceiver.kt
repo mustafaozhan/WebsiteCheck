@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.app.AlarmManager
+import android.app.Notification
 import android.app.PendingIntent
 import android.os.PowerManager
 import android.util.Log
@@ -17,6 +18,10 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
 import mustafaozhan.github.com.websitecheck.R
+import android.app.NotificationManager
+import mustafaozhan.github.com.websitecheck.ui.activities.MainActivity
+import android.content.Context.NOTIFICATION_SERVICE
+import android.content.Context.NOTIFICATION_SERVICE
 
 
 /**
@@ -88,13 +93,30 @@ class AlarmReceiver : BroadcastReceiver() {
 
     }
 
-    @Suppress("DEPRECATION")
-    private fun senNotification(name: String, context: Context) {
-        Log.d("Whatsssup:", name)
-        val mBuilder = NotificationCompat.Builder(context)
-        mBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
-        mBuilder.setContentTitle(name)
-        mBuilder.setContentText("Online!")
 
+    private fun senNotification(name: String, context: Context) {
+        val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+
+        // prepare intent which is triggered if the
+// notification is selected
+
+        //val intent = Intent(this, NotificationReceiver::class.java)
+// use System.currentTimeMillis() to have a unique ID for the pending intent
+        //  val pIntent = PendingIntent.getActivity(this, System.currentTimeMillis().toInt(), intent, 0)
+
+// build notification
+// the addAction re-use the same intent to keep the example short
+        val n = Notification.Builder(context)
+                .setContentTitle("New mail from " + "test@gmail.com")
+                .setContentText("Subject")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                // .setContentIntent(pIntent)
+                .build()
+        //    .addAction(R.drawable.icon, "Call", pIntent)
+        //    .addAction(R.drawable.icon, "More", pIntent)
+        //  .addAction(R.drawable.icon, "And more", pIntent).build()
+
+
+        notificationManager.notify(0, n)
     }
 }
