@@ -20,6 +20,7 @@ import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
 import android.preference.PreferenceManager
+import android.util.Log
 import mustafaozhan.github.com.websitecheck.utils.getIntPreferences
 import mustafaozhan.github.com.websitecheck.utils.putIntPreferences
 
@@ -71,8 +72,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getRequestId(): Int {
-        var temp = getIntPreferences(this, "requestCode", 1)
-        putIntPreferences(this, "requestCode", temp++)
+        var temp = getIntPreferences(applicationContext, "requestCode", 1)
+        Log.d("requestCode: ", temp.toString())
+        temp += 1
+        putIntPreferences(applicationContext, "requestCode", temp)
         return temp
     }
 
