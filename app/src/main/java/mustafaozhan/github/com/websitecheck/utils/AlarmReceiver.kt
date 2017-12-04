@@ -55,20 +55,22 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     fun setAlarm(context: Context, item: Item) {
-        var temp = 1
-        when (item.periodType) {
-            "Minute(s)" -> temp = 1
-            "Hour(s)" -> temp = 60
-            "Day(s)" -> temp = 60 * 24
-        }
+        if (item.isActive) {
+            var temp = 1
+            when (item.periodType) {
+                "Minute(s)" -> temp = 1
+                "Hour(s)" -> temp = 60
+                "Day(s)" -> temp = 60 * 24
+            }
 
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
-        intent.putExtra(TEXT, item.name)
-        intent.putExtra(STATE, item.state)
-        intent.putExtra(REQUEST_CODE, item.requestCode)
-        val pendingIntent = PendingIntent.getBroadcast(context, item.requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (1000 * 60 * item.period * temp).toLong(), pendingIntent)
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, AlarmReceiver::class.java)
+            intent.putExtra(TEXT, item.name)
+            intent.putExtra(STATE, item.state)
+            intent.putExtra(REQUEST_CODE, item.requestCode)
+            val pendingIntent = PendingIntent.getBroadcast(context, item.requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (1000 * 60 * item.period * temp).toLong(), pendingIntent)
+        }
     }
 
     fun cancelAlarm(context: Context, requestCode: Int) {

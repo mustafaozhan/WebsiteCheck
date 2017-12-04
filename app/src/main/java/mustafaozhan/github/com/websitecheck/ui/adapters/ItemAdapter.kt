@@ -3,6 +3,7 @@ package mustafaozhan.github.com.websitecheck.ui.adapters
 import android.app.AlertDialog
 import android.app.Fragment
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import kotlinx.android.synthetic.main.item_row.view.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.interfaces.ItemAdapterCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
+import org.jetbrains.anko.doAsync
 
 
 /**
@@ -61,6 +63,13 @@ class ItemAdapter(private var itemList: List<Item>?, fragment: Fragment) : Recyc
                 val alertDialog = alertDialogBuilder.create()
                 alertDialog.show()
                 true
+            }
+            itemView.switchStatus.setOnCheckedChangeListener { _, isActive ->
+
+                if (isActive)
+                    itemAdapterCallback.onSwitchStateChanged(item, isActive)
+                else
+                    itemAdapterCallback.onSwitchStateChanged(item, isActive)
             }
 
         }

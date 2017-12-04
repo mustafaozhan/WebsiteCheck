@@ -12,4 +12,5 @@ interface MainActivityCallBack {
 interface ItemAdapterCallBack {
     fun onItemDeleted(item: Item)
     fun onItemUpdated(item: Item)
+    fun onSwitchStateChanged(item: Item, isActive: Boolean)
 }
