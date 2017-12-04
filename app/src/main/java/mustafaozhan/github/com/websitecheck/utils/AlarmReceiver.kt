@@ -22,6 +22,7 @@ import android.app.NotificationManager
 import mustafaozhan.github.com.websitecheck.ui.activities.MainActivity
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
+import mustafaozhan.github.com.websitecheck.R.mipmap.ic_launcher
 
 
 /**
@@ -84,7 +85,7 @@ class AlarmReceiver : BroadcastReceiver() {
             val code = connection.responseCode
             run {
                 if (code.toString().startsWith("2"))
-                    senNotification(myURL, context)
+                    senNotification(myURL, context,"Online")
                 else
                     Log.d("OFFLINE:", myURL)
             }
@@ -94,26 +95,20 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 
-    private fun senNotification(name: String, context: Context) {
-        val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    private fun senNotification(name: String, context: Context, state: String) {
 
-        // prepare intent which is triggered if the
-// notification is selected
+        val notificationBuilder = NotificationCompat.Builder(context, "M_CH_ID")
 
-        val intent = Intent(context, MainActivity::class.java)
-//        use System . currentTimeMillis () to have a unique ID for the pending intent
-        val pIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), intent, 0)
-
-// build notification
-// the addAction re-use the same intent to keep the example short
-        val n = Notification.Builder(context)
-                .setContentTitle("New mail from " + "test@gmail.com")
-                .setContentText("Subject")
+        notificationBuilder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentIntent(pIntent)
-                .addAction(R.drawable.ic_launcher_foreground, "Call", pIntent).build()
+//                .setTicker("Hearty365")
+                .setContentTitle(name)
+                .setContentText("Website is now $state")
+//                .setContentInfo("Info")
 
-
-        notificationManager.notify(0, n)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(1, notificationBuilder.build())
     }
 }
