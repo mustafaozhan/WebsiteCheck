@@ -25,6 +25,7 @@ class AlarmReceiver : BroadcastReceiver() {
     companion object {
         private val TEXT = "text"
         private val STATE = "state"
+        private val REQUEST_CODE = "request_code"
     }
 
     @SuppressLint("WakelockTimeout")
@@ -42,8 +43,12 @@ class AlarmReceiver : BroadcastReceiver() {
             "Stateless"
         else
             extras.getString(STATE)
+        val requestCode = if (extras != null && extras.getInt(REQUEST_CODE, -1) == -1)
+            -1
+        else
+            extras.getInt(REQUEST_CODE)
 
-        checkURL(text, context, state)
+        checkURL(text, context, state, requestCode)
 
 
         wakeLock.release()
@@ -61,6 +66,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val intent = Intent(context, AlarmReceiver::class.java)
         intent.putExtra(TEXT, item.name)
         intent.putExtra(STATE, item.state)
+        intent.putExtra(REQUEST_CODE, item.requestCode)
         val pendingIntent = PendingIntent.getBroadcast(context, item.requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (1000 * 60 * item.period * temp).toLong(), pendingIntent)
     }
@@ -72,7 +78,7 @@ class AlarmReceiver : BroadcastReceiver() {
         alarmManager.cancel(pendingIntent)
     }
 
-    private fun checkURL(myURL: String, context: Context, state: String) {
+    private fun checkURL(myURL: String, context: Context, state: String, requestCode: Int) {
         doAsync {
             try {
                 val url = URL(myURL)
@@ -82,12 +88,12 @@ class AlarmReceiver : BroadcastReceiver() {
                 val code = connection.responseCode
                 run {
                     if (code.toString().startsWith("2") && state == "Online")
-                        senNotification(myURL, context, "Online")
+                        senNotification(myURL, context, "Online", requestCode)
 
                 }
             } catch (e: Exception) {
                 if (state == "Offline")
-                    senNotification(myURL, context, "Offline")
+                    senNotification(myURL, context, "Offline", requestCode)
             }
         }
 
@@ -95,7 +101,7 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
 
-    private fun senNotification(name: String, context: Context, state: String) {
+    private fun senNotification(name: String, context: Context, state: String, requestCode: Int) {
 
         val notificationBuilder = NotificationCompat.Builder(context, name)
 
@@ -109,6 +115,6 @@ class AlarmReceiver : BroadcastReceiver() {
 //                .setContentInfo("Info")
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(1, notificationBuilder.build())
+        notificationManager.notify(requestCode, notificationBuilder.build())
     }
 }
