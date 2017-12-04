@@ -20,6 +20,7 @@ import ninja.sakib.pultusorm.core.PultusORM
 import ninja.sakib.pultusorm.core.PultusORMCondition
 import ninja.sakib.pultusorm.core.PultusORMUpdater
 import mustafaozhan.github.com.websitecheck.utils.AlarmReceiver
+import org.jetbrains.anko.runOnUiThread
 import java.util.*
 
 
@@ -134,14 +135,18 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
                     .eq("periodType", item.periodType.toString())
                     .build()
 
+            val value: String = if (isActive)
+                "true"
+            else
+                "false"
             val updater: PultusORMUpdater = PultusORMUpdater.Builder()
-                    .set("isActive", isActive)
+                    .set("isActive", value)
                     .condition(condition)
                     .build()
 
             myDatabase!!.update(Item(), updater)
             Toast.makeText(activity.applicationContext, "Item Updated", Toast.LENGTH_SHORT).show()
-            setItems()
+
         }
     }
 
