@@ -122,6 +122,29 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
         alarmReceiver.setAlarm(activity.applicationContext, item)
     }
 
+    override fun onSwitchStateChanged(item: Item, isActive: Boolean) {
+        run {
+            val condition: PultusORMCondition = PultusORMCondition.Builder()
+                    .eq("name", item.name.toString())
+                    .and()
+                    .eq("state", item.state)
+                    .and()
+                    .eq("period", item.period.toString())
+                    .and()
+                    .eq("periodType", item.periodType.toString())
+                    .build()
+
+            val updater: PultusORMUpdater = PultusORMUpdater.Builder()
+                    .set("isActive", isActive)
+                    .condition(condition)
+                    .build()
+
+            myDatabase!!.update(Item(), updater)
+            Toast.makeText(activity.applicationContext, "Item Updated", Toast.LENGTH_SHORT).show()
+            setItems()
+        }
+    }
+
 
 }
 
