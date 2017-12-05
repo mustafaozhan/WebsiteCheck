@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +18,10 @@ import mustafaozhan.github.com.websitecheck.interfaces.ItemAdapterCallBack
 import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import mustafaozhan.github.com.websitecheck.ui.adapters.ItemAdapter
-import ninja.sakib.pultusorm.core.PultusORM
-import ninja.sakib.pultusorm.core.PultusORMCondition
-import ninja.sakib.pultusorm.core.PultusORMUpdater
 import mustafaozhan.github.com.websitecheck.utils.AlarmReceiver
+import ninja.sakib.pultusorm.callbacks.Callback
+import ninja.sakib.pultusorm.core.*
+import ninja.sakib.pultusorm.exceptions.PultusORMException
 import org.jetbrains.anko.runOnUiThread
 import java.util.*
 
@@ -41,7 +43,7 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
         myDatabase = PultusORM("myDatabase.db", activity.applicationContext.filesDir.absolutePath)
         setItems()
 
-        mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false)
+        mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false) as RecyclerView.LayoutManager?
         mRecyclerView.adapter = adapter
     }
 
@@ -124,30 +126,33 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onSwitchStateChanged(item: Item, isActive: Boolean) {
-        run {
-            val condition: PultusORMCondition = PultusORMCondition.Builder()
-                    .eq("name", item.name.toString())
-                    .and()
-                    .eq("state", item.state)
-                    .and()
-                    .eq("period", item.period.toString())
-                    .and()
-                    .eq("periodType", item.periodType.toString())
-                    .build()
+        class ResponseCallback : Callback {
+            override fun onSuccess(type: PultusORMQuery.Type) {
+                Log.d("${type.name}", "Success")
+            }
 
-            val value: String = if (isActive)
-                "true"
-            else
-                "false"
+            override fun onFailure(type: PultusORMQuery.Type, exception: PultusORMException) {
+                log("${type.name}", "Failure")
+                exception.printStackTrace()
+            }
+        }
+
+        val condition: PultusORMCondition = PultusORMCondition.Builder()
+                .eq("name", item.name.toString())
+                .and()
+                .eq("state", item.state)
+                .and()
+                .eq("period", item.period.toString())
+                .and()
+                .eq("periodType", item.periodType.toString())
+                .build()
             val updater: PultusORMUpdater = PultusORMUpdater.Builder()
-                    .set("isActive", value)
+                    .set("isActive", isActive.toString())
                     .condition(condition)
                     .build()
 
-            myDatabase!!.update(Item(), updater)
-            Toast.makeText(activity.applicationContext, "Item Updated", Toast.LENGTH_SHORT).show()
+        myDatabase!!.update(Item(), updater, ResponseCallback())
 
-        }
     }
 
 
