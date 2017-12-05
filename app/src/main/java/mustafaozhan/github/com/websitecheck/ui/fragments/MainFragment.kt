@@ -120,8 +120,7 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
 
     override fun onItemAdded(item: Item) {
         setItems()
-        val alarmReceiver = AlarmReceiver()
-        alarmReceiver.setAlarm(activity.applicationContext, item)
+        AlarmReceiver().setAlarm(activity.applicationContext, item)
     }
 
     override fun onSwitchStateChanged(item: Item, isActive: Boolean) {
@@ -144,7 +143,7 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
                 .build()
 
         myDatabase!!.update(Item(), updater)
-
+        AlarmReceiver().cancelAlarm(activity.applicationContext, item.requestCode)
     }
 
 

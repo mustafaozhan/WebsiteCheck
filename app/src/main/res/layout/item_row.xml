@@ -4,7 +4,6 @@
     android:id="@+id/mConstraintLayoutItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
     <Switch
         android:id="@+id/switchStatus"
         android:layout_width="wrap_content"
@@ -17,11 +16,16 @@
 
     <TextView
         android:id="@+id/txtName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="32dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@+id/switchStatus"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
