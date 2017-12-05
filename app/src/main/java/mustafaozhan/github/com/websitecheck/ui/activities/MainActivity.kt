@@ -13,26 +13,27 @@ import kotlinx.android.synthetic.main.activity_main.*
 import mustafaozhan.github.com.websitecheck.R
 import mustafaozhan.github.com.websitecheck.ui.fragments.MainFragment
 import mustafaozhan.github.com.websitecheck.ui.fragments.SettingsFragment
-import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.dialog.*
 import kotlinx.android.synthetic.main.dialog.view.*
 import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import ninja.sakib.pultusorm.core.PultusORM
-import android.preference.PreferenceManager
-import android.util.Log
+import android.view.View
 import mustafaozhan.github.com.websitecheck.utils.getIntPreferences
 import mustafaozhan.github.com.websitecheck.utils.putIntPreferences
 
 
 class MainActivity : AppCompatActivity() {
-    private var mainActivityCallBack: MainActivityCallBack? = null
-
     companion object {
         private val MAIN = "main_fragment"
         private val SETTINGS = "settings_fragment"
         private var doubleBackToExitPressedOnce = false
+        private val REQUEST_CODE = "requestCode"
+        private val DATABASE_NAME = "myDatabase.db"
     }
+
+    private var mainActivityCallBack: MainActivityCallBack? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +50,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showDialog() {
-        val factory = LayoutInflater.from(this)
-        val addItemDialogView = factory.inflate(R.layout.dialog, null)
+        val addItemDialogView = View.inflate(applicationContext, R.layout.dialog, null)
         val addItemDialog = AlertDialog.Builder(this).create()
         addItemDialog.setView(addItemDialogView)
         addItemDialogView.mSpinnerStatus.setItems("Online", "Offline")
@@ -72,15 +72,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getRequestId(): Int {
-        var temp = getIntPreferences(applicationContext, "requestCode", 1)
-        Log.d("requestCode: ", temp.toString())
+        var temp = getIntPreferences(applicationContext, REQUEST_CODE, 1)
         temp += 1
-        putIntPreferences(applicationContext, "requestCode", temp)
+        putIntPreferences(applicationContext, REQUEST_CODE, temp)
         return temp
     }
 
     private fun addItem(item: Item) {
-        val myDatabase = PultusORM("myDatabase.db", applicationContext.filesDir.absolutePath)
+        val myDatabase = PultusORM(DATABASE_NAME, applicationContext.filesDir.absolutePath)
         myDatabase.save(item)
         mainActivityCallBack!!.onItemAdded(item)
     }

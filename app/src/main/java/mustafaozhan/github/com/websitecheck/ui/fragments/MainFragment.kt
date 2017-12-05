@@ -5,7 +5,6 @@ import android.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +18,7 @@ import mustafaozhan.github.com.websitecheck.interfaces.MainActivityCallBack
 import mustafaozhan.github.com.websitecheck.model.Item
 import mustafaozhan.github.com.websitecheck.ui.adapters.ItemAdapter
 import mustafaozhan.github.com.websitecheck.utils.AlarmReceiver
-import ninja.sakib.pultusorm.callbacks.Callback
 import ninja.sakib.pultusorm.core.*
-import ninja.sakib.pultusorm.exceptions.PultusORMException
-import org.jetbrains.anko.runOnUiThread
 import java.util.*
 
 
@@ -69,9 +65,7 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onItemUpdated(item: Item) {
-
-        val factory = LayoutInflater.from(activity)
-        val addItemDialogView = factory.inflate(R.layout.dialog, null)
+        val addItemDialogView = View.inflate(activity.applicationContext, R.layout.dialog, null)
         val addItemDialog = AlertDialog.Builder(activity).create()
         addItemDialog.setView(addItemDialogView)
         addItemDialogView.eTxtUrl.setText(item.name.toString())
