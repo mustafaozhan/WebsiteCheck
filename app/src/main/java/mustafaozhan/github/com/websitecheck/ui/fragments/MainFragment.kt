@@ -37,7 +37,7 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         myDatabase = PultusORM("myDatabase.db", activity.applicationContext.filesDir.absolutePath)
-        setItems()
+
 
         mRecyclerView.layoutManager = LinearLayoutManager(activity.applicationContext, LinearLayout.VERTICAL, false) as RecyclerView.LayoutManager?
         mRecyclerView.adapter = adapter
@@ -62,6 +62,11 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
         }
         setItems()
         Toast.makeText(activity.applicationContext, "Item Deleted", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onResume() {
+        setItems()
+        super.onResume()
     }
 
     override fun onItemUpdated(item: Item) {
@@ -129,8 +134,12 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
                 .and()
                 .eq("periodType", item.periodType.toString())
                 .build()
+        val value = if (isActive)
+            1
+        else
+            0
         val updater: PultusORMUpdater = PultusORMUpdater.Builder()
-                .set("isActive", isActive.toString())
+                .set("isActive", value)
                 .condition(condition)
                 .build()
 
