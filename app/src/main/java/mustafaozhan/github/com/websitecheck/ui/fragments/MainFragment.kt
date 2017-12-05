@@ -126,17 +126,6 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
     }
 
     override fun onSwitchStateChanged(item: Item, isActive: Boolean) {
-        class ResponseCallback : Callback {
-            override fun onSuccess(type: PultusORMQuery.Type) {
-                Log.d("${type.name}", "Success")
-            }
-
-            override fun onFailure(type: PultusORMQuery.Type, exception: PultusORMException) {
-                log("${type.name}", "Failure")
-                exception.printStackTrace()
-            }
-        }
-
         val condition: PultusORMCondition = PultusORMCondition.Builder()
                 .eq("name", item.name.toString())
                 .and()
@@ -146,12 +135,12 @@ class MainFragment : Fragment(), MainActivityCallBack, ItemAdapterCallBack {
                 .and()
                 .eq("periodType", item.periodType.toString())
                 .build()
-            val updater: PultusORMUpdater = PultusORMUpdater.Builder()
-                    .set("isActive", isActive.toString())
-                    .condition(condition)
-                    .build()
+        val updater: PultusORMUpdater = PultusORMUpdater.Builder()
+                .set("isActive", isActive.toString())
+                .condition(condition)
+                .build()
 
-        myDatabase!!.update(Item(), updater, ResponseCallback())
+        myDatabase!!.update(Item(), updater)
 
     }
 
